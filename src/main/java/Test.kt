@@ -1,0 +1,57 @@
+import event.Event
+import event.IEvent
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
+
+fun main() {
+    Thread {
+
+        WatchDog.applyConfig(TestCase.TEST_CONFIG)
+
+        val eventSourceA = Observable.timer(1, TimeUnit.SECONDS).map {
+            Event("pageA", "disappear", "1234567890xxx", null)
+        }.subscribeOn(Schedulers.newThread())
+
+        val eventSourceA1 = Observable.timer(2, TimeUnit.SECONDS).map {
+            Event("pageA", "disappear", "1234567890xxx", null)
+        }.subscribeOn(Schedulers.newThread())
+
+        val eventSourceB = Observable.timer(3, TimeUnit.SECONDS).map {
+            Event("pageB", "appear", "1234567890xxx", null)
+        }.subscribeOn(Schedulers.newThread())
+
+
+        eventSourceA.observeOn(Schedulers.single()).subscribe {
+            WatchDog.enqueueEvent(
+                it.type,
+                it.action,
+                it.identifier,
+                "",
+                null
+            )
+        }
+
+        eventSourceA1.observeOn(Schedulers.single()).subscribe {
+            WatchDog.enqueueEvent(
+                it.type,
+                it.action,
+                it.identifier,
+                "",
+                null
+            )
+        }
+
+        eventSourceB.observeOn(Schedulers.single()).subscribe {
+            WatchDog.enqueueEvent(
+                it.type,
+                it.action,
+                it.identifier,
+                "",
+                null
+            )
+        }
+
+    }.start()
+    while (true) {}
+}
