@@ -10,7 +10,7 @@ fun main() {
         WatchDog.applyConfig(TestCase.TEST_CONFIG_FOR_ANY)
 
 
-        val eventSourceA1 = Observable.interval(2, 50, TimeUnit.MILLISECONDS).map {
+        val eventSourceA1 = Observable.interval(1, 50, TimeUnit.MILLISECONDS).map {
             Event("pageA", "disappear", "1234567890xxx", null)
         }.subscribeOn(Schedulers.newThread())
 
@@ -18,7 +18,7 @@ fun main() {
             Event("pageA", "disappear", "1234567890xxx", null)
         }.subscribeOn(Schedulers.newThread())
 
-        val eventSourceB = Observable.interval(3, 50, TimeUnit.MILLISECONDS).map {
+        val eventSourceB = Observable.interval(1, 50, TimeUnit.MILLISECONDS).map {
             Event("pageB", "appear", "1234567890xxx", null)
         }.subscribeOn(Schedulers.newThread())
 
