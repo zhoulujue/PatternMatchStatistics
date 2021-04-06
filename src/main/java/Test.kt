@@ -7,17 +7,18 @@ import java.util.concurrent.TimeUnit
 fun main() {
     Thread {
 
-        WatchDog.applyConfig(TestCase.TEST_CONFIG)
+        WatchDog.applyConfig(TestCase.TEST_CONFIG_FOR_ANY)
 
-        val eventSourceA = Observable.timer(1, TimeUnit.SECONDS).map {
+
+        val eventSourceA1 = Observable.interval(2, 50, TimeUnit.MILLISECONDS).map {
             Event("pageA", "disappear", "1234567890xxx", null)
         }.subscribeOn(Schedulers.newThread())
 
-        val eventSourceA1 = Observable.timer(2, TimeUnit.SECONDS).map {
+        val eventSourceA = Observable.interval(1, 50, TimeUnit.MILLISECONDS).map {
             Event("pageA", "disappear", "1234567890xxx", null)
         }.subscribeOn(Schedulers.newThread())
 
-        val eventSourceB = Observable.timer(3, TimeUnit.SECONDS).map {
+        val eventSourceB = Observable.interval(3, 50, TimeUnit.MILLISECONDS).map {
             Event("pageB", "appear", "1234567890xxx", null)
         }.subscribeOn(Schedulers.newThread())
 
